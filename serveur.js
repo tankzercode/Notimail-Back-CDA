@@ -1,7 +1,7 @@
 // Importe Express et initialise une application
 import express from 'express';
 const app = express();
-
+import bcrypt from "bcrypt"
 // Importe la connexion à la base de données depuis connectDB.js
 import connection from './connectDB.js';
 
@@ -21,6 +21,15 @@ app.use(morgan('dev'));
 // Utilisation d'express.json() pour analyser les corps des requêtes au format JSON
 app.use(express.json());
 
+
+
+app.use(cors({
+  origin: 'localhost:5173',
+  methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', "DELETE", "PATCH"],
+  credentials: true,
+
+}))
+
 // Route pour la racine de l'API, renvoie simplement un message "Hello World!"
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -36,6 +45,18 @@ const startServer = async () => {
     await connection.authenticate();
     await User.sync({ force: false });
 
+    const salt = 10
+    const user = await User.create({
+      first_name: "root",
+      last_name: "root",
+      firm_name: "root",
+      email: "root",
+      phone_number: "root",
+      password: await bcrypt.hash("root", salt),
+      is_admin: true,
+      has_mail: false
+    });
+    
     // Lance le serveur Express pour écouter les connexions entrantes sur le port spécifié
     app.listen(port, () => {
       console.log(`Example app listening on port ${port}`);

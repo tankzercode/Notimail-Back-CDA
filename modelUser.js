@@ -49,3 +49,4 @@ const User = connection.define('users', {
 });
 
 export default User; // Exporte le modèle User pour pouvoir l'utiliser dans d'autres fichiers
+
