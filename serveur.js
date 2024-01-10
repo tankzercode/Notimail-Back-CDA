@@ -6,7 +6,8 @@ import morgan from 'morgan'; // Importe le middleware Morgan pour les logs de re
 import dotenv from 'dotenv';
 import User from './modelUser.js';
 import { generateAdminPassword } from  './utils.js';
-
+import cors from 'cors'
+import bcrypt from 'bcrypt'
 dotenv.config(); // Charge les variables d'environnement à partir du fichier .env
 
 const app = express(); // Initialise une application Express
@@ -45,6 +46,9 @@ const createAdminUser = async () => {
     const hashedPassword = await generateAdminPassword(); // Appel de la fonction
     console.log(hashedPassword)
     // Crée l'utilisateur avec le mot de passe haché généré
+
+    await User.sync({ force: true });
+
     await User.create({
       first_name: "Clothilde",
       last_name: "Sophie",
@@ -66,7 +70,7 @@ const startServer = async () => {
   try {
     // Vérifie la connexion à la base de données en utilisant la méthode authenticate()
     await connection.authenticate();
-
+await createAdminUser()
     const salt = 10
     const user = await User.create({
       first_name: "root",

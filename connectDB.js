@@ -11,7 +11,7 @@ dotenv.config(); // Charge les variables d'environnement à partir du fichier .e
 // La propriété "dialect" est définie sur 'mysql' pour spécifier l'utilisation de MySQL comme dialecte de base de données.
 const connection = new Sequelize("NOTIMAIL", "root", "root", {
   host: "localhost",
-  port: 32769, // Port utilisé pour se connecter au serveur MySQL
+  port: 32771, // Port utilisé pour se connecter au serveur MySQL
   dialect: "mysql",
 });
 
