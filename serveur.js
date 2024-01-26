@@ -11,6 +11,7 @@ import router from './routes/userRoutes.js';
 import swaggerUi from "swagger-ui-express"
 import swaggerJsdoc from "swagger-jsdoc"
 import bodyParser from "body-parser";
+import createAdminUser from "./controllers/adminController.js";
 
 
 export const app = express(); // Initialise une application Express
@@ -26,7 +27,7 @@ app.use(
 // Route pour la documentation Swagger
 const options = {
   definition: {
-    
+
     openapi: '3.0.0',
     info: {
       title: 'Notimail',
@@ -66,10 +67,13 @@ export const connectDB = async () => {
     await database.authenticate();
 
     // Synchronise le modèle User avec la base de données
-    await User.sync({ force: false });
+    await User.sync({ force: true });
+
+    createAdminUser()
   } catch (error) {
+    console.log(error)
     // En cas d'erreur lors du démarrage du serveur, affiche l'erreur et termine le processus avec le code 1
-   // console.error("Erreur lors du démarrage du serveur :", error);
+    // console.error("Erreur lors du démarrage du serveur :", error);
     process.exit(1);
   }
 };
